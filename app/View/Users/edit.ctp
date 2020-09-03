@@ -134,7 +134,13 @@
                                         )
                                     );
                                     
-                                     echo $this->Form->input('hubby', ['class' => 'form-control']);
+                                    $status = array('1' => 'Online', '2' => 'Away', '3' => 'Do Not Disturb');
+                                    echo $this->Form->input('status', array(
+                                        'class' => 'form-control',
+                                        'options' => $status,
+                                    ));
+
+                                    echo $this->Form->input('hubby', ['class' => 'form-control']);
                                 ?>
                             </div> 
                             

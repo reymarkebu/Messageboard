@@ -77,6 +77,11 @@ class User extends AppModel {
                 'rule' => array('notBlank'),
             )
         ),
+        'status' => array(
+            'required' => array(
+                'rule' => array('notBlank'),
+            )
+        ),
     );
 
     public function equaltofield($check,$otherfield) 

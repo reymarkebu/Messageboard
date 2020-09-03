@@ -1,7 +1,4 @@
 <?php
-App::uses('Controller', 'Controller');
-App::uses('AuthComponent', 'Controller/Component');
-
 class UsersController extends AppController {
 
     public $paginate = array(
@@ -92,6 +89,14 @@ class UsersController extends AppController {
             $user['User']['gender'] = 'Female';
         } else {
             $user['User']['gender'] = '';
+        }
+
+        if ($user['User']['status'] == 1) {
+            $user['User']['status'] = 'Online';
+        } elseif ($user['User']['status'] == 2) {
+            $user['User']['status'] = 'Away';
+        } else {
+            $user['User']['status'] = 'Do Not Disturb';
         }
 
         $this->set('user', $user);
