@@ -1,35 +1,6 @@
-<!-- <div class="users form">
-    <fieldset>
-        <legend><?php echo __('Users'); ?></legend>
-        <table cellpadding="0" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user): ?>
-                <tr>
-                    <td><?php echo h($user['User']['name']) ?></td>
-                    <td><?php echo h($user['User']['email']) ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </fieldset>
-<div> -->
-<?php 
-// if($this->Session->check('Auth.User')){
-// echo $this->Html->link( "Return to Users",   array('action'=>'index') ); 
-// echo "<br>";
-// echo $this->Html->link( "Logout",   array('action'=>'logout') ); 
-// }else{
-// echo $this->Html->link( "Return to Login Screen",   array('action'=>'login') ); 
-// }
-?>
 
-<div class="users form">
+
+<div class="users">
 <h1>Users</h1>
 <table>
     <thead>
@@ -58,7 +29,7 @@
                 <?php echo $this->Html->link(    "Edit",   array('action'=>'edit', $user['User']['id']) ); ?> | 
                 <?php
                     if( $user['User']['status'] != 0){ 
-                        echo $this->Html->link(    "Delete", array('action'=>'delete', $user['User']['id']));
+                        echo $this->Html->link("Delete", array('action'=>'delete', $user['User']['id']));
                     }
                 ?>
             </td>
@@ -71,6 +42,4 @@
     <?php echo $this->Paginator->numbers(array(   'class' => 'numbers '     ));?>
     <?php echo $this->Paginator->next(__( ' next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 </div>
-<?php 
-    echo $this->Html->link( "Logout",   array('action'=>'logout') ); 
-?>
+
