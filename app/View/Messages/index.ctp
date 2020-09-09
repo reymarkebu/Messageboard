@@ -378,6 +378,10 @@ function deleteChat(token) {
   var result = confirm('Are you sure you want to delete this Conversation?');
   
   if(result) {
+
+    $('#write_msg').attr("disabled", "disabled");
+    $('#reply_btn').attr("disabled", "disabled");
+    
     var base_url = window.location.origin;
     
     $.ajax({

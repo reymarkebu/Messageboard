@@ -28,8 +28,9 @@ class MessagesController extends AppController {
         );
 
         
-        $messages = $this->paginate('Message');
-        // print_r($this->params['paging']['Message']);
+        $data = $this->paginate('Message');
+        $messages = $this->Message->filterData($data, $this->Auth->user('id'));
+
         $this->set(compact('messages'));
     }
 

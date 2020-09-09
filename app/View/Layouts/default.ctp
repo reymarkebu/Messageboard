@@ -58,7 +58,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<?php echo $this->Html->link( "Logout ",   array('controller' => 'users', 'action'=>'logout') ); ?>	
 					<label for=""> <h5 style="color: white"> | <?php echo $this->Session->read('Auth.User.name'); ?></h5>  </label>
 					<?php
-						echo $this->Html->image("user-avatar2.png", [
+						echo $this->Html->image("https://ptetutorials.com/images/user-profile.png", [
 							"alt" => "Profile",
 							"width" => '40px',
 							'url' => ['controller' => 'Users', 'action' => 'view',  $this->Session->read('Auth.User.id')]

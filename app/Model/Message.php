@@ -74,9 +74,7 @@ class Message extends AppModel {
 
 
         $data = $db->fetchAll(
-
-
-            ' SELECT message.message, message.message_token, contact.id, user.name, message.created FROM (
+            ' SELECT message.message, message.message_token, contact.id, message.created FROM (
                 SELECT message_token, MAX(created) AS created 
                 FROM messages 
                 GROUP BY message_token
@@ -84,8 +82,6 @@ class Message extends AppModel {
              JOIN messages `message` USING (message_token, created) 
              left join contacts as contact
                 ON message.contact_id=contact.id 
-             left join users user 
-                ON contact.email=user.email 
             where (message.sender_id = :user_id OR message.receiver_id= :user_id) 
             order by message.created 
             desc '. $limit,
@@ -121,8 +117,6 @@ class Message extends AppModel {
          JOIN messages `message` USING (message_token, created) 
          left join contacts as contact
             ON message.contact_id=contact.id 
-         left join users user 
-            ON contact.email=user.email 
         where (message.sender_id = 1 OR message.receiver_id= 1) ";
     
 
@@ -130,5 +124,40 @@ class Message extends AppModel {
         $results = $this->query($sql);
         
         return $results[0][0]['pages'];
+    }
+
+    public function filterData($data, $user_id) {
+        foreach($data as $key => $val) {
+            $token = $val['message']['message_token'];
+            if($token) {
+                
+                $user_ids = explode('-', $token);
+                if($user_ids[0] === $user_id) {
+                    $receiver_id = $user_ids[1];
+                } else {
+                    $receiver_id = $user_ids[0];
+                }
+
+                $user = $this->getUser($receiver_id);
+
+                if($user) {
+                    $data[$key]['user']['name'] = $user['User']['name'];
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public function getUser($id) {
+        $userModel = ClassRegistry::init('User');
+        $user = $userModel->find('first', array(
+            'conditions' => array(
+                'id' => $id
+            )
+        ));
+
+        return $user;
+        
     }
 }
