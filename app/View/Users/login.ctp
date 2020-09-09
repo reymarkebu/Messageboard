@@ -28,7 +28,7 @@
   text-decoration: underline;
 }
 .login-form  .btn.btn-primary {
-  background: #f0ad4e none repeat scroll 0 0;
+  /* background: #f0ad4e none repeat scroll 0 0; */
   border-color: #f0ad4e;
   color: #ffffff;
   font-size: 14px;
@@ -52,50 +52,51 @@
 .back a {color: #444444; font-size: 13px;text-decoration: none;}
 </style>
 <body id="LoginForm">
-<div class="container">
-<h1 class="form-heading">login Form</h1>
-<div class="login-form">
-<div class="main-div">
-    <div class="panel">
-    <h2>Login</h2>
-    <p>Please enter your email and password</p>
-    </div>
-    <?php echo $this->Session->flash('auth'); ?>
-    <?php echo $this->Form->create('User'); ?>
+  <div class="container">
+    <h1 class="form-heading">login Form</h1>
+    <div class="login-form">
+      <div class="main-div">
+        <div class="panel">
+          <h2>Login</h2>
+          <p>Please enter your email and password</p>
+        </div>
+
+        <?php 
+          echo $this->Session->flash('auth'); 
+          echo $this->Form->create('User');
+        ?>
 
         <div class="form-group" style='margin-bottom:none !important;padding:0 !important'>
 
-        <?php echo $this->Form->input('email', array(
-                'class' => 'form-control',
-                'id' =>'inputEmail', 
-                'placeholder' => 'Email Address', 
-                'label' => false 
-                )
-            ); 
-        ?>   
-
+          <?php echo $this->Form->input('email', array(
+                  'class' => 'form-control',
+                  'id' =>'inputEmail', 
+                  'placeholder' => 'Email Address', 
+                  'label' => false 
+                  )
+              ); 
+          ?>   
         </div>
 
         <div class="form-group" style ='margin-bottom:none !important;padding:0 !important;'>
 
             <?php echo $this->Form->input('password', array(
-                    'class' => 'form-control', 
-                    
-                    'id' => 'inputPassword', 
-                    'placeholder' => 'Password',
-                    'label' => false
-                    )
-                ); ?>  
+                  'class' => 'form-control', 
+                  
+                  'id' => 'inputPassword', 
+                  'placeholder' => 'Password',
+                  'label' => false
+                  )
+              ); 
+            ?>  
 
         </div>
-        
+              
         <?php 
-            echo $this->Form->button('Submit',['class'=>'btn btn-primary']);
+            echo $this->Form->button('SUBMIT',['class'=>'btn btn-primary']);
             echo $this->Form->end(); 
         ?> 
+      </idv>
     </div>
-<p class="botto-text"> Designed by Sunil Rajput</p>
-</div></div></div>
-
-
+  </div>
 </body>

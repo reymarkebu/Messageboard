@@ -29,7 +29,7 @@
   text-decoration: underline;
 }
 .register-form  .btn.btn-primary {
-  background: #f0ad4e none repeat scroll 0 0;
+  /* background: #f0ad4e none repeat scroll 0 0; */
   border-color: #f0ad4e;
   color: #ffffff;
   font-size: 14px;
@@ -53,28 +53,29 @@
 .back a {color: #444444; font-size: 13px;text-decoration: none;}
 </style>
 <body id="registerForm">
-<div class="container">
-<h1 class="form-heading">Registration Form</h1>
-<div class="register-form">
-<div class="main-div col-md-8">
-    <div class="panel">
-    <h2>Register</h2>
-    </div>
-    <?php echo $this->Session->flash('auth'); ?>
-    
-    <?php echo $this->Form->create('User'); ?>
-        <?php
-            $errors = '';
-            foreach($this->validationErrors['User'] as $key => $val) {
-                $errors .= $this->Html->tag('li', $val[0]); 
-            }
-            
-            echo $this->Html->tag('ul', $errors);
-            
-            $this->Form->inputDefaults(array(
-                'error' => false
-            ));
+  <div class="container">
+    <h1 class="form-heading">Registration Form</h1>
+    <div class="register-form">
+      <div class="main-div col-md-8">
+        <div class="panel">
+          <h2>Register</h2>
+        </div>
+        <?php 
+          echo $this->Session->flash('auth'); 
+          echo $this->Form->create('User'); 
+
+          $errors = '';
+          foreach($this->validationErrors['User'] as $key => $val) {
+              $errors .= $this->Html->tag('li', $val[0]); 
+          }
+          
+          echo $this->Html->tag('ul', $errors);
+          
+          $this->Form->inputDefaults(array(
+              'error' => false
+          ));
         ?>
+          
         <div style='margin-bottom:none !important;padding:0 !important'>
             <?php echo $this->Form->input('name', array(
                     'class' => 'form-control',
@@ -106,13 +107,12 @@
         </div>
         
         <?php 
-            echo $this->Form->button('Submit',['class'=>'btn btn-primary']);
+            echo $this->Form->button('SUBMIT',['class'=>'btn btn-primary']);
             echo $this->Form->end(); 
         ?> 
+      </div>
+      <p class="botto-text"> Designed by Sunil Rajput</p>
     </div>
-<p class="botto-text"> Designed by Sunil Rajput</p>
-</div></div></div>
-
-
+  </div>
 </body>
 

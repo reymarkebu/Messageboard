@@ -1,25 +1,25 @@
 
-
 <div class="row">
     <div class="col-md-2">
-        
         <nav class="large-3 medium-4 columns" id="actions-sidebar">
             <ul class="side-nav">
+                <?php 
+                    if ($user['User']['id'] === $this->Session->read('Auth.User.id')): ?>
+                    <li>
+                        <?php echo $this->Html->link('Edit User', array('action' => 'edit', $user['User']['id'] )) ?>
+                    </li>
+                    <?php endif; ?>
                 <li>
-                    <?php echo $this->Html->link('Edit User', array('action' => 'edit', $user['User']['id'] )) ?>
+                    <?php echo $this->Html->link('My Contacts', array('controller'=> 'contacts', 'action' => 'index')) ?>
                 </li>
                 <li>
-                    <?php echo $this->Html->link('Messages', array('action' => 'index')) ?>
+                    <?php echo $this->Html->link('Messages', array('controller'=> 'messages', 'action' => 'index')) ?>
                 </li>
             </ul>
         </nav>    
     </div>
     <div class="col-md-10">
         <div class="users large-9 medium-8 columns content">
-
-       
-            <!------ Include the above in your HEAD tag ---------->
-
 
             <div class="row">
 
@@ -35,17 +35,17 @@
                             <div class="col-md-3 col-lg-3 " align="center"> 
                             <?php 
 
-                            if (empty($user['User']['image'])) {
-                                echo $this->Html->image("user-avatar2.png", [
-                                    "alt" => "Profile",
-                                     "class" => "col-lg-12",
-                                ]);          
-                            } else {
-                                echo $this->Html->image('uploads/users/'.$user['User']['image'], [
-                                    "alt" => "Profile",
-                                    "class" => "col-lg-12",
-                                ]);
-                            }
+                                if (empty($user['User']['image'])) {
+                                    echo $this->Html->image("user-avatar2.png", [
+                                        "alt" => "Profile",
+                                        "class" => "col-lg-12",
+                                    ]);          
+                                } else {
+                                    echo $this->Html->image('uploads/users/'.$user['User']['image'], [
+                                        "alt" => "Profile",
+                                        "class" => "col-lg-12",
+                                    ]);
+                                }
                             
                             ?>
                             </div>
@@ -54,7 +54,7 @@
                                 <table class="table table-user-information">
                                     <tbody>
                                         <tr>
-                                            <td>Name:</td>
+                                            <td>Name</td>
                                             <td><?php echo h($user['User']['name']) ?></td>
                                         </tr>
                                         <tr>

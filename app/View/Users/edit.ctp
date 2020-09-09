@@ -45,47 +45,65 @@
                     <div class="container">
                         
 
-                        <?php echo $this->Form->create('User',array('enctype'=>'multipart/form-data')); ?>
-                        <!-- diplay error message -->
-                        <?php
-                                    $errors = '';
-                                    foreach($this->validationErrors['User'] as $key => $val) {
-                                        $errors .= $this->Html->tag('li', $val[0]); 
-                                    }
-                                    
-                                    echo $this->Html->tag('ul', $errors);
-                                ?>
-                                <?php
-                                    $this->Form->inputDefaults(array(
-                                        'error' => false
-                                    ));
-                                ?> 
+                        <?php 
+                            echo $this->Form->create('User',array('enctype'=>'multipart/form-data')); 
+
+                            $errors = '';
+                            foreach($this->validationErrors['User'] as $key => $val) {
+                                $errors .= $this->Html->tag('li', $val[0]); 
+                            }
+                            
+                            echo $this->Html->tag('ul', $errors);
+
+                            $this->Form->inputDefaults(array(
+                                'error' => false
+                            ));
+                        ?>
+
                         <div class="row form-group">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-btn">
                                         
-                                        <?php echo $this->Form->input('image', array('type'=>'file', 'id' => 'imgInp', 'label'=>false)); ?>
-                                            <!-- <span class="btn btn-primary btn-file">
-                                                
-                                            Browse… <input type="file" id="imgInp" name="">        
-                                                
-
-                                            </span> -->
+                                            <?php echo $this->Form->input('image', array('type'=>'file', 'id' => 'imgInp', 'label'=>false)); ?>
+                                            
                                         </span>
-                                        <!-- <input type="text" class="form-control" readonly> -->
                                     </div>
                                     <img id='img-upload' />
                                 
                                     <div class="col-md-12" id="has-img-upload">
                                         <?php
+
                                             if (isset($this->data['User']['image'])) {  
+
+
+                                                echo $this->Form->input('image_hidden', 
+                                                        array('type'=>'hidden', 
+                                                                'value' => $this->data['User']['image']
+                                                            )
+                                                        );
+
                                                 echo $this->Html->image('uploads/users/'.$this->data['User']['image'], [
                                                     "alt" => "Profile",
                                                     "class" => "col-lg-12",
                                                 ]);
+
+                                            } elseif (!empty($this->data['User']['image_hidden'])) {
+                                                
+                                                echo $this->Form->input('image_hidden', 
+                                                        array('type'=>'hidden', 
+                                                                'value' => $this->data['User']['image_hidden']
+                                                            )
+                                                        );
+
+                                                echo $this->Html->image('uploads/users/'.$this->data['User']['image_hidden'], [
+                                                    "alt" => "Profile",
+                                                    "class" => "col-lg-12",
+                                                ]);
+
                                             } else {
+
                                                 echo $this->Html->image('user-avatar2.png', [
                                                     "alt" => "Profile",
                                                     "class" => "col-lg-12",
@@ -93,34 +111,32 @@
                                             }
                                         ?>
                                     </div>
-                                    
                                 </div>
                                 
                             </div>
-                            <div class=" col-md-4 col-lg-4 form-control">
+                            <div class="col-md-4 col-lg-4 form-control">
 
                                 <?php 
-                                echo $this->Form->input('name', ['class' => 'form-control']);
-                                echo $this->Form->input('email', ['class' => 'form-control']);
-                                echo $this->Form->input('new_password', array( 
-                                    'label' => 'New Password',
-                                     'type'=> 'password',
-                                     'class' => 'form-control'
-                                    )
-                                );
-                                echo $this->Form->input('new_password_confirm', array(
-                                    'label' => 'Confirm New Password',
-                                     'type'=> 'password',
-                                     'class' => 'form-control'
-                                    )
-                                );
+                                    echo $this->Form->input('name', ['class' => 'form-control']);
+                                    echo $this->Form->input('email', ['class' => 'form-control']);
+                                    echo $this->Form->input('new_password', array( 
+                                        'label' => 'New Password',
+                                        'type'=> 'password',
+                                        'class' => 'form-control'
+                                        )
+                                    );
+                                    echo $this->Form->input('new_password_confirm', array(
+                                        'label' => 'Confirm New Password',
+                                        'type'=> 'password',
+                                        'class' => 'form-control'
+                                        )
+                                    );
 
-                                $gender = array('1' => 'Male', '2' => 'Female');
-                                echo $this->Form->input('gender', array(
-                                    'class' => 'form-control',
-                                    'options' => $gender,
-                                ));
-                                
+                                    $gender = array('1' => 'Male', '2' => 'Female');
+                                    echo $this->Form->input('gender', array(
+                                        'class' => 'form-control',
+                                        'options' => $gender,
+                                    ));
                                 ?>
                             </div>
 
@@ -145,7 +161,7 @@
                             </div> 
                             
                             <?php 
-                                echo $this->Form->button('UPDATE',['class'=>'btn btn-primary']);
+                                echo $this->Form->button('UPDATE',['class'=>'btn btn-primary col-md-3']);
                                 echo $this->Form->end(); 
                             ?>
                         </div>
@@ -155,49 +171,49 @@
             </div>
         </div>
 </div>
-<script>
-        $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4',
-            format:"yyyy-mm-dd"
+<script type="text/javascript">
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4',
+        format:"yyyy-mm-dd"
 
+    });
+
+    $(document).ready( function() {
+        $(document).on('change', '.btn-file :file', function() {
+        var input = $(this),
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [label]);
         });
 
-        $(document).ready( function() {
-    	$(document).on('change', '.btn-file :file', function() {
-		var input = $(this),
-			label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-		input.trigger('fileselect', [label]);
-		});
-
-		$('.btn-file :file').on('fileselect', function(event, label) {
-		    
-		    var input = $(this).parents('.input-group').find(':text'),
-		        log = label;
-		    
-		    if( input.length ) {
-		        input.val(log);
-		    } else {
-		        if( log ) alert(log);
-		    }
-	    
-		});
-		function readURL(input) {
-		    if (input.files && input.files[0]) {
-		        var reader = new FileReader();
-		        
-		        reader.onload = function (e) {
-		            $('#img-upload').attr('src', e.target.result);
+        $('.btn-file :file').on('fileselect', function(event, label) {
+            
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+            
+            if( input.length ) {
+                input.val(log);
+            } else {
+                if( log ) alert(log);
+            }
+        
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    $('#img-upload').attr('src', e.target.result);
                     $('#has-img-upload').hide();
-		        }
-		        
-		        reader.readAsDataURL(input.files[0]);
-		    }
-		}
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-		$("#imgInp").change(function(){
-		    readURL(this);
-		}); 	
+        $("#imgInp").change(function(){
+            readURL(this);
+        }); 	
 	});
-    </script>
+</script>
 
 

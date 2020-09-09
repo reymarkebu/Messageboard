@@ -1,5 +1,3 @@
-
-
 <div class="users">
 <h1>Users</h1>
 <table>
@@ -26,7 +24,7 @@
             <td style="text-align: center;"><?php echo $this->Time->niceShort($user['User']['modified']); ?></td>
             <td style="text-align: center;"><?php echo $user['User']['status']; ?></td>
             <td >
-                <?php echo $this->Html->link(    "Edit",   array('action'=>'edit', $user['User']['id']) ); ?> | 
+                <?php echo $this->Html->link("Edit",   array('action'=>'edit', $user['User']['id']) ); ?> | 
                 <?php
                     if( $user['User']['status'] != 0){ 
                         echo $this->Html->link("Delete", array('action'=>'delete', $user['User']['id']));
