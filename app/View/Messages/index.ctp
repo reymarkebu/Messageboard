@@ -19,152 +19,151 @@
   <div class="col-md-10">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 toppad" >
 
+        <div class="card">
+            <div class="card-header">
 
-      <div class="card">
-        <div class="card-header">
-
-            <h3 class="card-title">Messages</h3>
-        
-        </div>
-        
-        
-        <div class="card-body">
-          <div class="container">
-            <div class="messaging">
-              <div class="inbox_msg">
-                <div class="inbox_people">
-                  <div class="headind_srch">
-        
-        
-                    <div class="recent_heading">
-                      <h4>Recent</h4>
-                    </div>
-        
-                    <div class="srch_bar">
-                      <div class="stylish-input-group">
-                        <input type="text" class="search-bar"  placeholder="Search" disabled>
-                        <span class="input-group-addon">
-                        <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                        </span> </div>
-                    </div>
-        
-        
-                  </div>
-                  <div class="inbox_chat">
-                    <?php 
-                        $count = 0;
-                        foreach($messages as $message):
-                            $count++; 
-                    ?>
-                    <?php if($count % 2): ?>
-        
-        
-                        <div class="chat_list chat-<?php echo $message['message']['message_token']?>">
-        
-        
-                            <div class="chat_people" id="delete_chat_people">
-                                <div class="chat_img" 
-                                      id="<?php echo $message['message']['message_token']?>"> 
-                                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
-                                </div>
-        
-        
-                                <div class="chat_ib">
-                                    <h5>
-                                        <?php echo $message[0]['name'] ?> 
-                                        <span class="chat_date"> 
-                                          <?php echo $message['message']['created'] ?>
-                                        </span>
-                                    </h5>
-        
-                                    <p class="message_list" 
-                                      onclick="viewMessage('<?php echo $message['message']['message_token'] ?>')">
-                                                    <?php echo $message['message']['message'] ?>
-                                    </p>
-        
-                                    <span class="chat_delete" 
-                                          onclick="deleteChat('<?php echo $message['message']['message_token'] ?>')">
-                                          <i class="fa fa-trash"></i>
-                                    </span>
-                                    
-                                </div>
-        
-        
-                            </div>
-                        </div>
-                    <?php else: ?>
-                        <div class="chat_list chat-<?php echo $message['message']['message_token']?>">
-
-                            <div class="chat_people" id="delete_chat_people">
-                                
-                                
-                                <div class="chat_img" 
-                                      id="<?php echo $message['message']['message_token']?>"> 
-                                      <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
-                                
-                                </div>
-                                
-                                <div class="chat_ib">
-                                    <h5>
-                                        <?php echo $message[0]['name'] ?>  
-                                      
-                                        <span class="chat_date"> 
-                                          <?php echo $message['message']['created'] ?>
-                                        </span>
-                                    </h5>
-                                    
-                                    <p class="message_list" 
-                                      onclick="viewMessage('<?php echo $message['message']['message_token'] ?>')">
-                                      <?php echo $message['message']['message'] ?>
-                                    
-                                    
-                                    </p>
-                                    <span class="chat_delete" 
-                                          onclick="deleteChat('<?php echo $message['message']['message_token'] ?>')">
-                                      <i class="fa fa-trash"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif ?>
-
-                    <?php endforeach ?>
-                    <div class="col-md-12" style="margin-left:100px;">
-                    <?php 
-                      if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
-                        echo $this->Paginator->prev( __('Show Less | ', true), array(), null, array('class'=>'disabled'));
-                        echo $this->Paginator->next(__( 'Show More', true), array(), null, array('class' => 'disabled'));
-                      }
-                    ?>
-                    </div>
-                  </div>
-                </div>
-                <div class="mesgs">
-                  <div class="msg_history">
-                    
-                  </div>
-
-                  
-                  <div class="type_msg">
-                    <div class="input_msg_write">
-                      <input type="text" 
-                              class="write_msg" 
-                              id="write_msg" 
-                              placeholder="Type a message" 
-                              disabled/>
-                      <button class="msg_send_btn" 
-                              id="reply_btn" 
-                              type="button" disabled>
-                              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>      
+                <h3 class="card-title">Messages</h3>
+            
             </div>
-          </div>
+            <div class="err_message"></div>
+            
+            <div class="card-body">
+            <div class="container">
+                <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="inbox_people">
+                    <div class="headind_srch">
+            
+            
+                        <div class="recent_heading">
+                        <h4>Recent</h4>
+                        </div>
+            
+                        <div class="srch_bar">
+                        <div class="stylish-input-group">
+                            <input type="text" class="search-bar"  placeholder="Search" disabled>
+                            <span class="input-group-addon">
+                            <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                            </span> </div>
+                        </div>
+            
+            
+                    </div>
+                    <div class="inbox_chat">
+                        <?php 
+                            $count = 0;
+                            foreach($messages as $message):
+                                $count++; 
+                        ?>
+                        <?php if($count % 2): ?>
+            
+            
+                            <div class="chat_list chat-<?php echo $message['message']['message_token']?>">
+            
+            
+                                <div class="chat_people" id="delete_chat_people">
+                                    <div class="chat_img" 
+                                        id="<?php echo $message['message']['message_token']?>"> 
+                                    <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
+                                    </div>
+            
+            
+                                    <div class="chat_ib">
+                                        <h5>
+                                            <?php echo $message[0]['name'] ?> 
+                                            <span class="chat_date"> 
+                                            <?php echo $message['message']['created'] ?>
+                                            </span>
+                                        </h5>
+            
+                                        <p class="message_list" 
+                                        onclick="viewMessage('<?php echo $message['message']['message_token'] ?>')">
+                                                        <?php echo $message['message']['message'] ?>
+                                        </p>
+            
+                                        <span class="chat_delete" 
+                                            onclick="deleteChat('<?php echo $message['message']['message_token'] ?>')">
+                                            <i class="fa fa-trash"></i>
+                                        </span>
+                                        
+                                    </div>
+            
+            
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="chat_list chat-<?php echo $message['message']['message_token']?>">
+
+                                <div class="chat_people" id="delete_chat_people">
+                                    
+                                    
+                                    <div class="chat_img" 
+                                        id="<?php echo $message['message']['message_token']?>"> 
+                                        <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
+                                    
+                                    </div>
+                                    
+                                    <div class="chat_ib">
+                                        <h5>
+                                            <?php echo $message[0]['name'] ?>  
+                                        
+                                            <span class="chat_date"> 
+                                            <?php echo $message['message']['created'] ?>
+                                            </span>
+                                        </h5>
+                                        
+                                        <p class="message_list" 
+                                        onclick="viewMessage('<?php echo $message['message']['message_token'] ?>')">
+                                        <?php echo $message['message']['message'] ?>
+                                        
+                                        
+                                        </p>
+                                        <span class="chat_delete" 
+                                            onclick="deleteChat('<?php echo $message['message']['message_token'] ?>')">
+                                        <i class="fa fa-trash"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif ?>
+
+                        <?php endforeach ?>
+                        <div class="col-md-12" style="margin-left:100px;">
+                        <?php 
+                        if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
+                            echo $this->Paginator->prev( __('Show Less | ', true), array(), null, array('class'=>'disabled'));
+                            echo $this->Paginator->next(__( 'Show More', true), array(), null, array('class' => 'disabled'));
+                        }
+                        ?>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="mesgs">
+                    <div class="msg_history">
+                        
+                    </div>
+
+                    
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                        <input type="text" 
+                                class="write_msg" 
+                                id="write_msg" 
+                                placeholder="Type a message" 
+                                disabled/>
+                        <button class="msg_send_btn" 
+                                id="reply_btn" 
+                                type="button" disabled>
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
     </div>
   </div>
 </div>
@@ -197,7 +196,12 @@ function viewMessage(token) {
             scrollTop: $( 
             'html, body').get(0).scrollHeight 
             }, 2000); 
-        }
+        },
+        error: function(messages) {
+            $(".err_message").text("Could not load Conversations! please try again later.");
+            $(".err_message").fadeIn("slow");
+            $(".err_message").delay(2000).fadeOut(1000);
+        },
     });
 } 
 
@@ -222,7 +226,12 @@ function reply(token) {
                 'html, body').get(0).scrollHeight 
             }, 2000); 
 
-        }
+        },
+        error: function() {
+            $(".err_message").text("Unable to reply to this conversation! please try again later.");
+            $(".err_message").fadeIn("slow");
+            $(".err_message").delay(2000).fadeOut(1000);
+        },
     });
 }
 
@@ -245,7 +254,12 @@ function deleteChat(token) {
                 console.log("messages", messages);
                 $('.msg_history').html('');
                 $('.chat-'+token).fadeOut();
-            }
+            },
+            error: function() {
+                $(".err_message").text("Could not delete Conversations! please try again later.");
+                $(".err_message").fadeIn("slow");
+                $(".err_message").delay(2000).fadeOut(1000);
+            },
         });
     }
 }
@@ -264,7 +278,12 @@ function deleteMessage(id) {
             success: function (message) {
                 console.log("message", message);
                 $('#delete_msg-'+id).fadeOut();
-            }
+            },
+            error: function() {
+                $(".err_message").text("Could not delete message! please try again later.");
+                $(".err_message").fadeIn("slow");
+                $(".err_message").delay(2000).fadeOut(1000);
+            },
         });
     }
 }
