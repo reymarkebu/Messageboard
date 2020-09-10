@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 10, 2020 at 01:18 AM
+-- Generation Time: Sep 10, 2020 at 09:20 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.0.33
 
@@ -32,11 +32,13 @@ DROP TABLE IF EXISTS `contacts`;
 CREATE TABLE IF NOT EXISTS `contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
+  `contact_user_id` int(11) NOT NULL,
   `email` varchar(128) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `email` (`email`)
+  KEY `email` (`email`),
+  KEY `contact_user_id` (`contact_user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
