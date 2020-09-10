@@ -108,6 +108,7 @@ class Message extends AppModel {
 
     public function paginateCount($conditions = null, $recursive = 0, $extra = array()) {
 
+        $user_id = $extra['extra']['user_id'];
         $sql = '';
         $sql .= "SELECT COUNT(message.message_token) as pages FROM (
             SELECT message_token, MAX(created) AS created 
@@ -117,7 +118,7 @@ class Message extends AppModel {
          JOIN messages `message` USING (message_token, created) 
          left join contacts as contact
             ON message.contact_id=contact.id 
-        where (message.sender_id = 1 OR message.receiver_id= 1) ";
+        where (message.sender_id = $user_id OR message.receiver_id= $user_id) ";
     
 
         $this->recursive = $recursive;
