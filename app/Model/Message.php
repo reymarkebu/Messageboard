@@ -22,10 +22,10 @@ class Message extends AppModel {
         ),
     );
 
-    public function getAllContactUsers($user_id) {
+    public function getAllContactUsers($user_id, $search_key) {
 
         $contactModel = ClassRegistry::init('Contact');
-        $data = $contactModel->getAllContactUsers($user_id);
+        $data = $contactModel->getAllContactUsers($user_id, $search_key);
         
         return $data;
     }
@@ -74,17 +74,22 @@ class Message extends AppModel {
 
 
         $data = $db->fetchAll(
-            ' SELECT message.message, message.message_token, contact.id, message.created FROM (
-                SELECT message_token, MAX(created) AS created 
-                FROM messages 
-                GROUP BY message_token
-             ) AS x 
-             JOIN messages `message` USING (message_token, created) 
-             left join contacts as contact
-                ON message.contact_id=contact.id 
-            where (message.sender_id = :user_id OR message.receiver_id= :user_id) 
-            order by message.created 
-            desc '. $limit,
+            ' SELECT 
+                message.message, 
+                message.message_token, 
+                message.created, 
+                CASE
+                    WHEN message.sender_id = :user_id THEN receiver_user.name
+                    WHEN message.receiver_id = :user_id THEN sender_user.name 
+                END AS `name`
+                FROM 
+                    (SELECT message_token, MAX(created) AS created FROM messages GROUP BY message_token) AS x 
+                    JOIN messages `message` USING (message_token, created) 
+                    INNER JOIN users sender_user ON message.sender_id = sender_user.id
+                    INNER JOIN users receiver_user ON message.receiver_id = receiver_user.id
+                WHERE (message.sender_id = :user_id OR message.receiver_id = :user_id)
+                ORDER BY message.created 
+                DESC '. $limit,
             array('user_id' => $user_id)
         );
 
@@ -100,7 +105,7 @@ class Message extends AppModel {
         $sql = '';
 
         // Adding LIMIT Clause
-        $limit = ' limit '. (($page - 1) * $limit) . ', ' . $limit;
+        $limit = ' LIMIT '. (($page - 1) * $limit) . ', ' . $limit;
         $results = $this->getMessageList($extra['extra']['user_id'], $limit);
     
         return $results;
@@ -127,38 +132,41 @@ class Message extends AppModel {
         return $results[0][0]['pages'];
     }
 
-    public function filterData($data, $user_id) {
-        foreach($data as $key => $val) {
-            $token = $val['message']['message_token'];
-            if($token) {
-                
-                $user_ids = explode('-', $token);
-                if($user_ids[0] === $user_id) {
-                    $receiver_id = $user_ids[1];
-                } else {
-                    $receiver_id = $user_ids[0];
-                }
+    public function getContact($user_id, $contact_user_id) {
+        $contactModel = ClassRegistry::init('Contact');
+        $contact = $contactModel->find('first', array(
+            'conditions' => array(
+                    'user_id'           => $user_id,
+                    'contact_user_id'   => $contact_user_id        
+                )
+            )
+        );
 
-                $user = $this->getUser($receiver_id);
-
-                if($user) {
-                    $data[$key]['user']['name'] = $user['User']['name'];
-                }
-            }
-        }
-
-        return $data;
+        return $contact;
     }
 
-    public function getUser($id) {
+    public function addContact($user_id, $contact_user_id) {
         $userModel = ClassRegistry::init('User');
-        $user = $userModel->find('first', array(
-            'conditions' => array(
-                'id' => $id
-            )
-        ));
 
-        return $user;
-        
+        $user_email = $userModel->find('first', array(
+                'conditions' => array(
+                    'id' => $contact_user_id
+                ),
+                'fields' => array(
+                    'User.email'
+                )
+            )
+        );
+
+        $contactModel = ClassRegistry::init('Contact');
+        $contactModel->create();
+
+        $data['Contact']['user_id'] = $user_id;
+        $data['Contact']['contact_user_id'] = $contact_user_id;
+        $data['Contact']['email'] = $user_email['User']['email'];
+
+        if ($contactModel->save($data)) {
+            return $contactModel->getInsertID();
+        }
     }
 }

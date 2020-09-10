@@ -28,8 +28,9 @@ class MessagesController extends AppController {
         );
 
         
-        $data = $this->paginate('Message');
-        $messages = $this->Message->filterData($data, $this->Auth->user('id'));
+        $messages = $this->paginate('Message');
+        
+        // $messages = $this->Message->filterData($data, $this->Auth->user('id'));
 
         $this->set(compact('messages'));
     }
@@ -45,17 +46,29 @@ class MessagesController extends AppController {
             //set data
             if($this->Auth->user('id') === $token[0]) { // check sender
                 $this->request->data['Message']['receiver_id'] = $token[1];
+                $contact_user_id = $token[1];
+
 
             } elseif ($this->Auth->user('id') === $token[1]) {
                 $this->request->data['Message']['receiver_id'] = $token[0];
+                $contact_user_id = $token[0];
             }
             
-
             $this->request->data['Message']['sender_id'] = $this->Auth->user('id');
-            $this->request->data['Message']['contact_id'] = $requestData['contact_id'];
             $this->request->data['Message']['message'] = $requestData['message'];
             $this->request->data['Message']['message_token'] = $requestData['token'];
 
+
+            
+
+            $contact = $this->Message->getContact($this->Auth->user('id'), $contact_user_id);
+            
+            if(count($contact) > 0) {
+                $this->request->data['Message']['contact_id'] = $contact['Contact']['id'];
+            } else {
+                $contact_id = $this->Message->addContact($this->Auth->user('id'), $contact_user_id);
+                $this->request->data['Message']['contact_id'] = $contact_id;
+            }
 
             if ($this->Message->save($this->request->data)) {
                 $this->autoRender = false;
@@ -71,7 +84,7 @@ class MessagesController extends AppController {
                     
                     $htmlMessage = $this->Message->htmlParser($messages, $this->Auth->user('id'));
                 }
-
+                
                 return $htmlMessage;
             }
         }
@@ -106,15 +119,24 @@ class MessagesController extends AppController {
                 $this->Session->setFlash(__('Unable to deliver your message! Please try again.'));
             }
         }
+    }
 
-        // get all contacts and construct options value
-        $data = $this->Message->getAllContactUsers($this->Auth->user('id'));
-        $contacts = [];
-        foreach($data as $contact) {
-            $contacts[$contact['Contact']['id'] .'-'. $contact['User']['id']] = $contact['User']['name'];
+    public function search() {
+        $this->autoRender = false;
+        if( $this->request->is('ajax') ) {
+            $term = $this->request->query['q'];
+            
+            $result = $this->Message->getAllContactUsers($this->Auth->user('id'), $term);
+            
+            // Format the result for select2
+            $contacts = [];
+            foreach($result as $key => $contact) {
+                $contacts[$key]['id'] = $contact['Contact']['id'] .'-'. $contact['User']['id'];
+                $contacts[$key]['text'] = $contact['User']['name'];
+            }
+            
+            echo json_encode($contacts);
         }
-
-        $this->set('contacts', $contacts);
     }
 
     public function fetch($token) {

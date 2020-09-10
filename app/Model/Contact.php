@@ -8,6 +8,11 @@ class Contact extends AppModel {
                 'rule' => array('notBlank'), 
             ),
         ),
+        'contact_user_id' => array(
+            'required' => array(
+                'rule' => array('notBlank'), 
+            ),
+        ),
         'email' => array(
             'required' => array(
                 'rule' => array('email', true),    
@@ -57,10 +62,14 @@ class Contact extends AppModel {
         return $email;
     }
 
-    function getAllContactUsers($user_id) {
+    function getAllContactUsers($user_id, $search_key = null) {
+        
         $options = array(
             'conditions' =>
-                array('Contact.user_id = '. $user_id),
+                array(
+                    'Contact.user_id' => $user_id,
+                    'User.name LIKE' => '%'. $search_key .'%' 
+                ),
             'joins' =>
                 array(
                     array(
@@ -75,7 +84,6 @@ class Contact extends AppModel {
         );
 
         $contacts = $this->find('all',$options);
-
         return $contacts;
     }
 

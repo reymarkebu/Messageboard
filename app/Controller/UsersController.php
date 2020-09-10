@@ -58,7 +58,6 @@ class UsersController extends AppController {
     }
 
     public function view($id = null) {
-
         if (!$id) {
             throw new NotFoundException(__('Invalid User'));
         }

@@ -7,11 +7,6 @@ App::uses('AppModel', 'Model');
 class User extends AppModel {
     var $name = 'User';
 
-    public $hasMany = array(
-        'Contact' => array(
-            'className' => 'Contact',
-        )
-    );
 
     public $validate = array(
         'name' => array(

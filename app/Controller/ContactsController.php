@@ -42,11 +42,11 @@ class ContactsController extends AppController {
             $this->request->data['Contact']['user_id'] = $this->Auth->user('id');
 
             //check if user exist
-            $email = $this->Contact->findUserByEmail($this->request->data['Contact']['email']);
+            $user = $this->Contact->findUserByEmail($this->request->data['Contact']['email']);
             
-            if(count($email) > 0) {
+            if(count($user) > 0) {
                 $this->Contact->create();
-
+                $this->request->data['Contact']['contact_user_id'] = $user['User']['id'];
                 if ($this->Contact->save($this->request->data)) {
                     $this->Session->setFlash(__('New contact has been saved.'));
                     
