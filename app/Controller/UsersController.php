@@ -1,7 +1,4 @@
 <?php
-App::uses('Controller', 'Controller');
-App::uses('AuthComponent', 'Controller/Component');
-
 class UsersController extends AppController {
 
     public $paginate = array(
@@ -24,7 +21,7 @@ class UsersController extends AppController {
                 
             if ($this->Auth->login()) {
                 
-                // update las_login_time
+                // update last_login_time
                 $this->User->read(null, $this->Auth->user('id'));
                 $this->User->set(array(
                     'last_login_time' => date('Y-m-d H:i:s'),
@@ -52,27 +49,12 @@ class UsersController extends AppController {
     public function index() {
         $this->paginate = array(
             'limit' => 5,
-            'order' => array('User.created' => 'asc')
+            'order' => array('User.created' => 'desc')
         );
 
         $users = $this->paginate('User');
+        print_r($this->params['paging']['User']);
         $this->set(compact('users'));
-    }
-
-    public function add() {
-        if ($this->request->is('post')) {
-            $this->User->create();
-
-            
-			if ($this->User->save($this->request->data)) {
-
-				// $this->Session->setFlash(__('The user has been saved.'));
-                
-                return $this->redirect(array('controller' => 'homepages', 'action' => 'welcome'));
-			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
-			}
-        }
     }
 
     public function view($id = null) {
@@ -94,6 +76,14 @@ class UsersController extends AppController {
             $user['User']['gender'] = '';
         }
 
+        if ($user['User']['status'] == 1) {
+            $user['User']['status'] = 'Online';
+        } elseif ($user['User']['status'] == 2) {
+            $user['User']['status'] = 'Away';
+        } else {
+            $user['User']['status'] = 'Do Not Disturb';
+        }
+
         $this->set('user', $user);
     }
 
@@ -111,19 +101,24 @@ class UsersController extends AppController {
            
             //Check if image was sent
             if (!empty($this->request->data['User']['image'])) {
+
                 if ($this->request->data['User']['image']['error'] === 0) {
                     $file = $this->request->data['User']['image']; // Creating a variable to handle upload
-                    // debug($file);
                     
+
                     $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
                     $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
 
                     //if extension is valid
                     if(in_array($ext, $arr_ext)) {
+
                         move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/uploads/users/' . $file['name']);
+                    
                         $this->request->data['User']['image'] = $file['name'];
                     } else {
                         $this->Session->setFlash(__('Image extention is not valid!'));
+                        $this->request->data = $user;
+                        return;
                     }
                 }
                 else {
@@ -149,6 +144,20 @@ class UsersController extends AppController {
 
         if (!$this->request->data) {
             $this->request->data = $user;
+        }
+    }
+
+    public function add() {
+        if ($this->request->is('post')) {
+            $this->User->create();
+
+            
+			if ($this->User->save($this->request->data)) {				
+                
+                return $this->redirect(array('controller' => 'homepages', 'action' => 'welcome'));
+			} else {
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+			}
         }
     }
 }

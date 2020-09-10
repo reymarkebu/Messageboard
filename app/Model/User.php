@@ -1,11 +1,18 @@
 <?php
 
-App::uses('AuthComponent', 'Controller/Component');
+
 App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
+App::uses('AppModel', 'Model');
 
 class User extends AppModel {
-
     var $name = 'User';
+
+    public $hasMany = array(
+        'Contact' => array(
+            'className' => 'Contact',
+        )
+    );
+
     public $validate = array(
         'name' => array(
             'required' => array(
@@ -14,7 +21,7 @@ class User extends AppModel {
             ),
             'between' => array(
                 'rule' => array('between', 5, 20), 
-                'message' => 'Names must be between 5 to 20 characters'
+                'message' => 'Name must be between 5 to 20 characters'
             ),
         ),
         'email' => array(
@@ -73,6 +80,11 @@ class User extends AppModel {
             ),
         ),
         'gender' => array(
+            'required' => array(
+                'rule' => array('notBlank'),
+            )
+        ),
+        'status' => array(
             'required' => array(
                 'rule' => array('notBlank'),
             )
